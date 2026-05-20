@@ -4,12 +4,23 @@ import (
 	"fmt"
 
 	"github.com/JunLang-7/blog-service/global"
+	"github.com/JunLang-7/blog-service/pkg/app"
 	"github.com/JunLang-7/blog-service/pkg/setting"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
+
+type BlogTagSwagger struct {
+	List  []*BlogTag
+	Pager *app.Pager
+}
+
+type BlogArticleSwagger struct {
+	List  []*BlogArticle
+	Pager *app.Pager
+}
 
 func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
 	s := "%s:%s@tcp(%s)/%s?charset=%s&parseTime=%t&loc=Local"

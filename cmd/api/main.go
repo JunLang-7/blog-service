@@ -29,6 +29,10 @@ func init() {
 	}
 }
 
+// @title 博客系统
+// @version 1.0
+// @description 用 Go 做项目：博客后端
+// @termsOfService https://github.com/JunLang-7
 func main() {
 	r := routers.NewRouter()
 	s := &http.Server{

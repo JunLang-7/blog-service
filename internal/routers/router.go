@@ -1,8 +1,11 @@
 package routers
 
 import (
+	_ "github.com/JunLang-7/blog-service/docs"
 	"github.com/JunLang-7/blog-service/internal/routers/api/v1"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func NewRouter() *gin.Engine {
@@ -10,6 +13,7 @@ func NewRouter() *gin.Engine {
 
 	tag := v1.NewTag()
 	article := v1.NewArticle()
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	apiV1 := r.Group("/api/v1")
 	{
 		apiV1.POST("/tags", tag.Create)
