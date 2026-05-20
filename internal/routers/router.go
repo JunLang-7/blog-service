@@ -2,6 +2,7 @@ package routers
 
 import (
 	_ "github.com/JunLang-7/blog-service/docs"
+	"github.com/JunLang-7/blog-service/internal/middleware"
 	"github.com/JunLang-7/blog-service/internal/routers/api/v1"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -10,6 +11,7 @@ import (
 
 func NewRouter() *gin.Engine {
 	r := gin.Default()
+	r.Use(middleware.Translations())
 
 	tag := v1.NewTag()
 	article := v1.NewArticle()
