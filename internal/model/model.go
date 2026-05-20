@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/JunLang-7/blog-service/global"
-	"github.com/JunLang-7/blog-service/pkg/app"
 	"github.com/JunLang-7/blog-service/pkg/setting"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -12,14 +11,14 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-type BlogTagSwagger struct {
-	List  []*BlogTag
-	Pager *app.Pager
-}
-
-type BlogArticleSwagger struct {
-	List  []*BlogArticle
-	Pager *app.Pager
+type Model struct {
+	ID         uint32 `gorm:"primary_key" json:"id"`
+	CreatedBy  string `json:"created_by"`
+	ModifiedBy string `json:"modified_by"`
+	CreatedOn  uint32 `json:"created_on"`
+	ModifiedOn uint32 `json:"modified_on"`
+	DeletedOn  uint32 `json:"deleted_on"`
+	IsDel      uint8  `json:"is_del"`
 }
 
 func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {

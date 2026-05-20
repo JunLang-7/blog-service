@@ -13,39 +13,28 @@ definitions:
   model.BlogArticle:
     properties:
       content:
-        description: 文章内容
         type: string
       cover_image_url:
-        description: 封面图片地址
         type: string
       created_by:
-        description: 创建人
         type: string
       created_on:
-        description: 创建时间
         type: integer
       deleted_on:
-        description: 删除时间
         type: integer
       desc:
-        description: 文章简述
         type: string
       id:
         type: integer
       is_del:
-        description: 是否删除 0 为未删除、1 为已删除
         type: integer
       modified_by:
-        description: 修改人
         type: string
       modified_on:
-        description: 修改时间
         type: integer
       state:
-        description: 状态 0 为禁用、1 为启用
         type: integer
       title:
-        description: 文章标题
         type: string
     type: object
   model.BlogArticleSwagger:
@@ -60,30 +49,22 @@ definitions:
   model.BlogTag:
     properties:
       created_by:
-        description: 创建人
         type: string
       created_on:
-        description: 创建时间
         type: integer
       deleted_on:
-        description: 删除时间
         type: integer
       id:
         type: integer
       is_del:
-        description: 是否删除 0 为未删除、1 为已删除
         type: integer
       modified_by:
-        description: 修改人
         type: string
       modified_on:
-        description: 修改时间
         type: integer
       name:
-        description: 标签名称
         type: string
       state:
-        description: 状态 0 为禁用、1 为启用
         type: integer
     type: object
   model.BlogTagSwagger:
