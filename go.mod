@@ -4,15 +4,17 @@ go 1.26.2
 
 require (
 	github.com/gin-gonic/gin v1.12.0
+	github.com/go-playground/locales v0.14.1
+	github.com/go-playground/universal-translator v0.18.1
+	github.com/go-playground/validator/v10 v10.30.2
+	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/spf13/viper v1.21.0
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.1
 	github.com/swaggo/swag v1.16.6
 	gorm.io/driver/mysql v1.5.7
-	gorm.io/gen v0.3.27
 	gorm.io/gorm v1.31.1
-	gorm.io/plugin/dbresolver v1.6.2
 )
 
 require (
@@ -36,14 +38,10 @@ require (
 	github.com/go-openapi/swag/stringutils v0.26.0 // indirect
 	github.com/go-openapi/swag/typeutils v0.26.0 // indirect
 	github.com/go-openapi/swag/yamlutils v0.26.0 // indirect
-	github.com/go-playground/locales v0.14.1 // indirect
-	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.30.2 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/goccy/go-yaml v1.19.2 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -74,6 +72,4 @@ require (
 	golang.org/x/tools v0.45.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
-	gorm.io/datatypes v1.2.4 // indirect
-	gorm.io/hints v1.1.0 // indirect
 )

@@ -16,6 +16,10 @@ App:
     - .jpg
     - .jpeg
     - .png
+JWT:
+  Secret: your_username
+  Issuer: blog-service
+  Expire: 7200
 Database:
   DBType: mysql
   Username: your_username
