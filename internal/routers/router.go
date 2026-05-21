@@ -2,19 +2,39 @@ package routers
 
 import (
 	"net/http"
+	"time"
 
 	_ "github.com/JunLang-7/blog-service/docs"
 	"github.com/JunLang-7/blog-service/global"
 	"github.com/JunLang-7/blog-service/internal/middleware"
 	"github.com/JunLang-7/blog-service/internal/routers/api"
 	"github.com/JunLang-7/blog-service/internal/routers/api/v1"
+	"github.com/JunLang-7/blog-service/pkg/limiter"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+var methodLimiters = limiter.NewMethodLimiter().AddBuckets(
+	limiter.LimitBucketRule{
+		Key:          "/auth",
+		FillInterval: time.Second,
+		Capacity:     10,
+		Quantum:      10,
+	},
+)
+
 func NewRouter() *gin.Engine {
-	r := gin.Default()
+	r := gin.New()
+	if global.ServerSetting.RunMode == "debug" {
+		r.Use(gin.Logger())
+		r.Use(gin.Recovery())
+	} else {
+		r.Use(middleware.AccessLog())
+		r.Use(middleware.Recovery())
+	}
+	r.Use(middleware.RateLimiter(methodLimiters))
+	r.Use(middleware.ContextTimeout(global.AppSetting.DefaultContextTimeout))
 	r.Use(middleware.Translations())
 
 	tag := v1.NewTag()
