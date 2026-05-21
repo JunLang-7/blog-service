@@ -1,8 +1,12 @@
 package routers
 
 import (
+	"net/http"
+
 	_ "github.com/JunLang-7/blog-service/docs"
+	"github.com/JunLang-7/blog-service/global"
 	"github.com/JunLang-7/blog-service/internal/middleware"
+	"github.com/JunLang-7/blog-service/internal/routers/api"
 	"github.com/JunLang-7/blog-service/internal/routers/api/v1"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -15,7 +19,10 @@ func NewRouter() *gin.Engine {
 
 	tag := v1.NewTag()
 	article := v1.NewArticle()
+	upload := api.NewUpload()
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.POST("/upload/file", upload.UploadFile)
+	r.StaticFS("/static", http.Dir(global.AppSetting.UploadSavePath))
 	apiV1 := r.Group("/api/v1")
 	{
 		apiV1.POST("/tags", tag.Create)
