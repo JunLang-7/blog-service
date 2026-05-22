@@ -1,6 +1,8 @@
 package model
 
 import (
+	"errors"
+
 	"github.com/JunLang-7/blog-service/pkg/app"
 	"gorm.io/gorm"
 )
@@ -45,6 +47,25 @@ func (t *BlogTag) List(db *gorm.DB, pageOffset, pageSize int) ([]*BlogTag, error
 		return nil, err
 	}
 	return tags, nil
+}
+
+func (t *BlogTag) ListByIDs(db *gorm.DB, ids []uint32) ([]*BlogTag, error) {
+	var tags []*BlogTag
+	db = db.Where("state = ? and is_del = ?", t.State, 0)
+	err := db.Where("id in (?)", ids).Find(&tags).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return tags, nil
+}
+
+func (t *BlogTag) Get(db *gorm.DB) (*BlogTag, error) {
+	var tag BlogTag
+	err := db.Where("id = ? and is_del = ? and state = ?", t.ID, 0, t.State).First(&tag).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return &tag, nil
 }
 
 func (t *BlogTag) Create(db *gorm.DB) error {

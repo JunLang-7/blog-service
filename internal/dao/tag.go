@@ -10,10 +10,20 @@ func (d *Dao) CountTag(name string, state uint8) (int, error) {
 	return tag.Count(d.engine)
 }
 
+func (d *Dao) GetTag(id uint32, state uint8) (*model.BlogTag, error) {
+	tag := model.BlogTag{Model: &model.Model{ID: id}, State: state}
+	return tag.Get(d.engine)
+}
+
 func (d *Dao) GetTagList(name string, state uint8, page, pageSize int) ([]*model.BlogTag, error) {
 	tag := model.BlogTag{Name: name, State: state}
 	pageOffset := app.GetPageOffset(page, pageSize)
 	return tag.List(d.engine, pageOffset, pageSize)
+}
+
+func (d *Dao) GetTagListByIDs(ids []uint32, state uint8) ([]*model.BlogTag, error) {
+	tag := model.BlogTag{State: state}
+	return tag.ListByIDs(d.engine, ids)
 }
 
 func (d *Dao) CreateTag(name string, state uint8, createBy string) error {

@@ -13,6 +13,11 @@ import (
 	"gorm.io/gorm/schema"
 )
 
+const (
+	STATE_CLOSE = 0
+	STATE_OPEN  = 1
+)
+
 type Model struct {
 	ID         uint32 `gorm:"primary_key" json:"id"`
 	CreatedBy  string `json:"created_by"`
