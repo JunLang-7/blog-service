@@ -68,7 +68,9 @@ func (a *Article) List(c *gin.Context) {
 
 	svc := service.New(c.Request.Context())
 	pager := app.Pager{Page: app.GetPage(c), PageSize: app.GetPageSize(c)}
-	articles, totalRows, err := svc.GetArticleList(&param, &pager)
+	filterTag := c.Query("tag_id") != ""
+	filterState := c.Query("state") != ""
+	articles, totalRows, err := svc.GetArticleList(&param, &pager, filterTag, filterState)
 	if err != nil {
 		global.Logger.Errorf(c, "svc.GetArticleList err: %v", err)
 		response.ToErrorResponse(errcode.ErrorGetArticlesFail)

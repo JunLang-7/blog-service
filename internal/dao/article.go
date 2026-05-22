@@ -60,12 +60,12 @@ func (d *Dao) DeleteArticle(id uint32) error {
 	return article.Delete(d.engine)
 }
 
-func (d *Dao) CountArticleListByTagID(tagID uint32, state uint8) (int, error) {
+func (d *Dao) CountArticleListByTagID(tagID uint32, state uint8, filterTag bool, filterState bool) (int, error) {
 	article := &model.BlogArticle{State: state}
-	return article.CountByTagID(d.engine, tagID)
+	return article.CountByTagID(d.engine, tagID, filterTag, filterState)
 }
 
-func (d *Dao) GetArticleListByTagID(tagID uint32, state uint8, page, pageSize int) ([]*model.ArticleRow, error) {
+func (d *Dao) GetArticleListByTagID(tagID uint32, state uint8, page, pageSize int, filterTag bool, filterState bool) ([]*model.ArticleRow, error) {
 	article := &model.BlogArticle{State: state}
-	return article.ListByTagID(d.engine, tagID, app.GetPageOffset(page, pageSize), pageSize)
+	return article.ListByTagID(d.engine, tagID, app.GetPageOffset(page, pageSize), pageSize, filterTag, filterState)
 }
