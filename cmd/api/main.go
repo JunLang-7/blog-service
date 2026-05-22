@@ -11,6 +11,7 @@ import (
 	"github.com/JunLang-7/blog-service/internal/routers"
 	"github.com/JunLang-7/blog-service/pkg/logger"
 	"github.com/JunLang-7/blog-service/pkg/setting"
+	"github.com/JunLang-7/blog-service/pkg/tracer"
 	"github.com/natefinch/lumberjack"
 )
 
@@ -26,6 +27,10 @@ func init() {
 	err = setupLogger()
 	if err != nil {
 		log.Fatalf("init.setupLogger err: %v", err)
+	}
+	err = setupTracer()
+	if err != nil {
+		log.Fatalf("init.setupTracer err: %v", err)
 	}
 }
 
@@ -98,5 +103,14 @@ func setupLogger() error {
 		MaxAge:    10,
 		LocalTime: true,
 	}, "", log.LstdFlags).WithCallers(2)
+	return nil
+}
+
+func setupTracer() error {
+	jaegerTracer, _, err := tracer.NewJaegerTracer("blog-service", "127.0.0.1:6831")
+	if err != nil {
+		return err
+	}
+	global.Tracer = jaegerTracer
 	return nil
 }
