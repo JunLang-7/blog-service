@@ -22,19 +22,21 @@ func (t *BlogTag) TableName() string {
 	return "blog_tag"
 }
 
-func (t *BlogTag) Count(db *gorm.DB) (int, error) {
+func (t *BlogTag) Count(db *gorm.DB, filterState bool) (int, error) {
 	var count int64
 	if t.Name != "" {
 		db = db.Where("name = ?", t.Name)
 	}
-	db = db.Where("state = ?", t.State)
+	if filterState {
+		db = db.Where("state = ?", t.State)
+	}
 	if err := db.Model(&t).Where("is_del = ?", 0).Count(&count).Error; err != nil {
 		return 0, err
 	}
 	return int(count), nil
 }
 
-func (t *BlogTag) List(db *gorm.DB, pageOffset, pageSize int) ([]*BlogTag, error) {
+func (t *BlogTag) List(db *gorm.DB, pageOffset, pageSize int, filterState bool) ([]*BlogTag, error) {
 	var tags []*BlogTag
 	if pageOffset >= 0 && pageSize > 0 {
 		db = db.Offset(pageOffset).Limit(pageSize)
@@ -42,7 +44,9 @@ func (t *BlogTag) List(db *gorm.DB, pageOffset, pageSize int) ([]*BlogTag, error
 	if t.Name != "" {
 		db = db.Where("name = ?", t.Name)
 	}
-	db = db.Where("state = ?", t.State)
+	if filterState {
+		db = db.Where("state = ?", t.State)
+	}
 	if err := db.Where("is_del = ?", 0).Find(&tags).Error; err != nil {
 		return nil, err
 	}

@@ -4,6 +4,7 @@ import (
 	"github.com/JunLang-7/blog-service/global"
 	"github.com/JunLang-7/blog-service/internal/service"
 	"github.com/JunLang-7/blog-service/pkg/app"
+	"github.com/JunLang-7/blog-service/pkg/convert"
 	"github.com/JunLang-7/blog-service/pkg/errcode"
 	"github.com/gin-gonic/gin"
 )
@@ -37,14 +38,15 @@ func (t *Tag) List(c *gin.Context) {
 
 	svc := service.New(c.Request.Context())
 	pager := app.Pager{Page: app.GetPage(c), PageSize: app.GetPageSize(c)}
-	totalRows, err := svc.CountTag(&service.CountTagRequest{Name: param.Name, State: param.State})
+	filterState := c.Query("state") != ""
+	totalRows, err := svc.CountTag(&service.CountTagRequest{Name: param.Name, State: param.State}, filterState)
 	if err != nil {
 		global.Logger.Errorf(c, "svc.CountTag err: %v", err)
 		response.ToErrorResponse(errcode.ErrorCountTagFail)
 		return
 	}
 
-	tags, err := svc.GetTagList(&param, &pager)
+	tags, err := svc.GetTagList(&param, &pager, filterState)
 	if err != nil {
 		global.Logger.Errorf(c, "svc.GetTagList err: %v", err)
 		response.ToErrorResponse(errcode.ErrorGetTagListFail)
@@ -52,7 +54,6 @@ func (t *Tag) List(c *gin.Context) {
 	}
 
 	response.ToResponseList(tags, totalRows)
-	return
 }
 
 // Create godoc
@@ -84,7 +85,6 @@ func (t *Tag) Create(c *gin.Context) {
 	}
 
 	response.ToResponse(gin.H{})
-	return
 }
 
 // Update godoc
@@ -100,6 +100,7 @@ func (t *Tag) Create(c *gin.Context) {
 // @Router /api/v1/tags/{id} [put]
 func (t *Tag) Update(c *gin.Context) {
 	param := service.UpdateTagRequest{}
+	param.ID = convert.StrTo(c.Param("id")).MustUInt32()
 	response := app.NewResponse(c)
 	valid, errs := app.BindAndValid(c, &param)
 	if !valid {
@@ -129,6 +130,7 @@ func (t *Tag) Update(c *gin.Context) {
 // @Router /api/v1/tags/{id} [delete]
 func (t *Tag) Delete(c *gin.Context) {
 	param := service.DeleteTagRequest{}
+	param.ID = convert.StrTo(c.Param("id")).MustUInt32()
 	response := app.NewResponse(c)
 	valid, errs := app.BindAndValid(c, &param)
 	if !valid {
