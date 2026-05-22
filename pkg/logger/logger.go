@@ -57,14 +57,21 @@ func NewLogger(w io.Writer, prefix string, flag int) *Logger {
 }
 
 func (l *Logger) clone() *Logger {
-	return new(*l)
+	nl := *l
+	if l.fields != nil {
+		nl.fields = make(Fields, len(l.fields))
+		for k, v := range l.fields {
+			nl.fields[k] = v
+		}
+	}
+	return &nl
 }
 
 // WithFields 设置日志公共字段
 func (l *Logger) WithFields(fields Fields) *Logger {
 	ll := l.clone()
-	if l.fields == nil {
-		l.fields = make(Fields)
+	if ll.fields == nil {
+		ll.fields = make(Fields)
 	}
 	for k, v := range fields {
 		ll.fields[k] = v
