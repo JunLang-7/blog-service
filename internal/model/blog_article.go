@@ -29,15 +29,19 @@ type ArticleRow struct {
 	ArticleDesc   string
 	CoverImageUrl string
 	Content       string
+	State         uint8
 }
 
 func (a *BlogArticle) TableName() string {
 	return "blog_article"
 }
 
-func (a *BlogArticle) Get(db *gorm.DB) (*BlogArticle, error) {
+func (a *BlogArticle) Get(db *gorm.DB, filterState bool) (*BlogArticle, error) {
 	var article BlogArticle
-	db = db.Where("id = ? and state = ? and is_del = ?", a.ID, a.State, 0)
+	db = db.Where("id = ? and is_del = ?", a.ID, 0)
+	if filterState {
+		db = db.Where("state = ?", a.State)
+	}
 	err := db.First(&article).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err

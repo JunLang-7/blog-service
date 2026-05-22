@@ -50,9 +50,9 @@ func (d *Dao) UpdateArticle(param *Article) error {
 	return article.Update(d.engine, values)
 }
 
-func (d *Dao) GetArticle(id uint32, state uint8) (*model.BlogArticle, error) {
+func (d *Dao) GetArticle(id uint32, state uint8, filterState bool) (*model.BlogArticle, error) {
 	article := &model.BlogArticle{Model: &model.Model{ID: id}, State: state}
-	return article.Get(d.engine)
+	return article.Get(d.engine, filterState)
 }
 
 func (d *Dao) DeleteArticle(id uint32) error {

@@ -18,7 +18,7 @@ type TagListRequest struct {
 type CreateTagRequest struct {
 	Name      string `form:"name" json:"name" binding:"required,min=3,max=100"`
 	CreatedBy string `form:"created_by" json:"created_by" binding:"required,min=3,max=100"`
-	State     uint8  `form:"state" json:"state" binding:"default=1,oneof=0 1"`
+	State     uint8  `form:"state,default=1" json:"state" binding:"oneof=0 1"`
 }
 
 type UpdateTagRequest struct {

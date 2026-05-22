@@ -66,7 +66,7 @@ func (t *BlogTag) ListByIDs(db *gorm.DB, ids []uint32) ([]*BlogTag, error) {
 func (t *BlogTag) Get(db *gorm.DB) (*BlogTag, error) {
 	var tag BlogTag
 	err := db.Where("id = ? and is_del = ? and state = ?", t.ID, 0, t.State).First(&tag).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+	if err != nil {
 		return nil, err
 	}
 	return &tag, nil

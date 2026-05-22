@@ -39,6 +39,9 @@ func (d *Dao) UpdateArticleTag(articleID uint32, tagID uint32, updatedBy string)
 }
 
 func (d *Dao) DeleteArticleTag(articleID uint32) error {
-	articleTag := model.BlogTagArticle{ArticleID: articleID}
+	articleTag, err := d.GetArticleTagByAID(articleID)
+	if err != nil {
+		return err
+	}
 	return articleTag.DeleteOne(d.engine)
 }

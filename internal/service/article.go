@@ -51,8 +51,8 @@ type Article struct {
 	Tag           *model.BlogTag `json:"tag"`
 }
 
-func (s *Service) GetArticle(param *ArticleRequest) (*Article, error) {
-	article, err := s.dao.GetArticle(param.ID, param.State)
+func (s *Service) GetArticle(param *ArticleRequest, filterState bool) (*Article, error) {
+	article, err := s.dao.GetArticle(param.ID, param.State, filterState)
 	if err != nil {
 		return nil, err
 	}
