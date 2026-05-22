@@ -20,7 +20,7 @@ func NewMethodLimiter() ILimiter {
 func (m MethodLimiter) Key(c *gin.Context) string {
 	uri := c.Request.RequestURI
 	index := strings.Index(uri, "?")
-	if index != -1 {
+	if index == -1 {
 		return uri
 	}
 	return uri[:index]
