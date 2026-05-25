@@ -32,6 +32,11 @@ Database:
   ParseTime: True
   MaxIdleConns: 10
   MaxOpenConns: 30
+Redis:
+  Addr: 127.0.0.1:6379
+  Password: your_password
+  DB: 0
+  PoolSize: 10
 Email:
   Host: smtp.qq.com
   Port: 465

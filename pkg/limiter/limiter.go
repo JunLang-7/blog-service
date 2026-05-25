@@ -9,7 +9,7 @@ import (
 
 type ILimiter interface {
 	Key(c *gin.Context) string
-	GetBucket(key string) (*ratelimit.Bucket, bool)
+	Take(key string) bool
 	AddBuckets(rules ...LimitBucketRule) ILimiter
 }
 

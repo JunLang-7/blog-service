@@ -13,6 +13,7 @@ import (
 	"github.com/JunLang-7/blog-service/pkg/setting"
 	"github.com/JunLang-7/blog-service/pkg/tracer"
 	"github.com/natefinch/lumberjack"
+	"github.com/redis/go-redis/v9"
 )
 
 func init() {
@@ -23,6 +24,10 @@ func init() {
 	err = setupDBEngine()
 	if err != nil {
 		log.Fatalf("init.setupDBEngine err: %v", err)
+	}
+	err = setupRedis()
+	if err != nil {
+		log.Fatalf("init.setupRedis err: %v", err)
 	}
 	err = setupLogger()
 	if err != nil {
@@ -75,6 +80,10 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
+	err = newSetting.ReadSection("Redis", &global.RedisSetting)
+	if err != nil {
+		return err
+	}
 	err = newSetting.ReadSection("Email", &global.EmailSetting)
 	if err != nil {
 		return err
@@ -91,6 +100,19 @@ func setupDBEngine() error {
 	var err error
 	global.DBEngine, err = model.NewDBEngine(global.DatabaseSetting)
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func setupRedis() error {
+	global.RedisClient = redis.NewClient(&redis.Options{
+		Addr:     global.RedisSetting.Addr,
+		Password: global.RedisSetting.Password,
+		DB:       global.RedisSetting.DB,
+		PoolSize: global.RedisSetting.PoolSize,
+	})
+	if r, err := global.RedisClient.Ping(context.Background()).Result(); r != "PONG" {
 		return err
 	}
 	return nil

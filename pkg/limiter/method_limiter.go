@@ -26,9 +26,12 @@ func (m MethodLimiter) Key(c *gin.Context) string {
 	return uri[:index]
 }
 
-func (m MethodLimiter) GetBucket(key string) (*ratelimit.Bucket, bool) {
-	bucket, ok := m.limiterBuckets[key]
-	return bucket, ok
+func (m MethodLimiter) Take(key string) bool {
+	bucket, ok := m.Limiter.limiterBuckets[key]
+	if !ok {
+		return true
+	}
+	return bucket.TakeAvailable(1) == 1
 }
 
 func (m MethodLimiter) AddBuckets(rules ...LimitBucketRule) ILimiter {

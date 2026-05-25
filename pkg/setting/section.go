@@ -41,6 +41,13 @@ type DatabaseSettingS struct {
 	MaxOpenConns int
 }
 
+type RedisSettingS struct {
+	Addr     string
+	Password string
+	DB       int
+	PoolSize int
+}
+
 type EmailSettingS struct {
 	Host     string
 	Port     int

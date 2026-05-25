@@ -24,6 +24,14 @@ var methodLimiters = limiter.NewMethodLimiter().AddBuckets(
 	},
 )
 
+var redisLimiters = limiter.NewRedisLimiter().AddBuckets(
+	limiter.LimitBucketRule{
+		Key:          "/auth",
+		FillInterval: time.Second,
+		Capacity:     10,
+		Quantum:      10,
+	})
+
 func NewRouter() *gin.Engine {
 	r := gin.New()
 	if global.ServerSetting.RunMode == "debug" {
@@ -34,7 +42,7 @@ func NewRouter() *gin.Engine {
 		r.Use(middleware.Recovery())
 	}
 	r.Use(middleware.Tracing())
-	r.Use(middleware.RateLimiter(methodLimiters))
+	r.Use(middleware.RateLimiter(redisLimiters))
 	r.Use(middleware.ContextTimeout(global.AppSetting.DefaultContextTimeout))
 	r.Use(middleware.Translations())
 
