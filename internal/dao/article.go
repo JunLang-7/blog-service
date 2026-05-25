@@ -1,9 +1,13 @@
 package dao
 
 import (
+	"errors"
+
 	"github.com/JunLang-7/blog-service/internal/model"
 	"github.com/JunLang-7/blog-service/pkg/app"
 )
+
+var ErrArticleAlreadyExists = errors.New("article already exists")
 
 type Article struct {
 	ID            uint32 `json:"id"`
@@ -25,6 +29,13 @@ func (d *Dao) CreateArticle(param *Article) (*model.BlogArticle, error) {
 		CoverImageUrl: param.CoverImageUrl,
 		State:         param.State,
 		Model:         &model.Model{CreatedBy: param.CreatedBy},
+	}
+	count, err := article.Count(d.engine, false)
+	if err != nil {
+		return nil, err
+	}
+	if count > 0 {
+		return nil, ErrArticleAlreadyExists
 	}
 	return article.Create(d.engine)
 }

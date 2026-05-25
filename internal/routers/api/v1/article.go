@@ -109,7 +109,7 @@ func (a *Article) Create(c *gin.Context) {
 	err := svc.CreateArticle(&param)
 	if err != nil {
 		global.Logger.Errorf(c, "svc.CreateArticle err: %v", err)
-		response.ToErrorResponse(errcode.ErrorCreateArticleFail)
+		toErrResponse(response, err, errcode.ErrorCreateArticleFail)
 		return
 	}
 

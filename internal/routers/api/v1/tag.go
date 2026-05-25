@@ -80,7 +80,7 @@ func (t *Tag) Create(c *gin.Context) {
 	err := svc.CreateTag(&param)
 	if err != nil {
 		global.Logger.Errorf(c, "svc.CreateTag err: %v", err)
-		response.ToErrorResponse(errcode.ErrorCreateTagFail)
+		toErrResponse(response, err, errcode.ErrorCreateTagFail)
 		return
 	}
 
@@ -148,4 +148,12 @@ func (t *Tag) Delete(c *gin.Context) {
 	}
 
 	response.ToResponse(gin.H{})
+}
+
+func toErrResponse(response *app.Response, err error, fallback *errcode.Error) {
+	if e, ok := err.(*errcode.Error); ok {
+		response.ToErrorResponse(e)
+	} else {
+		response.ToErrorResponse(fallback)
+	}
 }

@@ -1,9 +1,12 @@
 package service
 
 import (
+	"errors"
+
 	"github.com/JunLang-7/blog-service/internal/dao"
 	"github.com/JunLang-7/blog-service/internal/model"
 	"github.com/JunLang-7/blog-service/pkg/app"
+	"github.com/JunLang-7/blog-service/pkg/errcode"
 )
 
 type ArticleRequest struct {
@@ -113,6 +116,9 @@ func (s *Service) CreateArticle(param *CreateArticleRequest) error {
 		CreatedBy:     param.CreatedBy,
 	})
 	if err != nil {
+		if errors.Is(err, dao.ErrArticleAlreadyExists) {
+			return errcode.ErrorDuplicateArticle
+		}
 		return err
 	}
 

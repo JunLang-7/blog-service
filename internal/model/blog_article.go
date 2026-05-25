@@ -64,6 +64,20 @@ func (a *BlogArticle) Delete(db *gorm.DB) error {
 	return db.Where("id = ? and is_del = ?", a.ID, 0).Delete(a).Error
 }
 
+func (a *BlogArticle) Count(db *gorm.DB, fileState bool) (int, error) {
+	var count int64
+	if a.Title != "" {
+		db = db.Where("title = ?", a.Title)
+	}
+	if fileState {
+		db = db.Where("state = ?", a.State)
+	}
+	if err := db.Model(a).Where("is_del = ?", 0).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
+}
+
 func (a *BlogArticle) ListByTagID(db *gorm.DB, tagID uint32, pageOffset, pageSize int, filterTag bool, filterState bool) ([]*ArticleRow, error) {
 	fields := []string{"ar.id AS article_id", "ar.title AS article_title", "ar.desc AS article_desc", "ar.cover_image_url", "ar.content"}
 	fields = append(fields, []string{"t.id AS tag_id", "t.name AS tag_name"}...)

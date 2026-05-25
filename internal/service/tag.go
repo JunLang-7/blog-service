@@ -1,8 +1,12 @@
 package service
 
 import (
+	"errors"
+
+	"github.com/JunLang-7/blog-service/internal/dao"
 	"github.com/JunLang-7/blog-service/internal/model"
 	"github.com/JunLang-7/blog-service/pkg/app"
+	"github.com/JunLang-7/blog-service/pkg/errcode"
 )
 
 type CountTagRequest struct {
@@ -41,7 +45,11 @@ func (s *Service) GetTagList(param *TagListRequest, pager *app.Pager, filterStat
 }
 
 func (s *Service) CreateTag(param *CreateTagRequest) error {
-	return s.dao.CreateTag(param.Name, param.State, param.CreatedBy)
+	err := s.dao.CreateTag(param.Name, param.State, param.CreatedBy)
+	if errors.Is(err, dao.ErrTagAlreadyExists) {
+		return errcode.ErrorDuplicateTag
+	}
+	return err
 }
 
 func (s *Service) UpdateTag(param *UpdateTagRequest) error {
