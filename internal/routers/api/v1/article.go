@@ -84,7 +84,7 @@ func (a *Article) List(c *gin.Context) {
 // Create godoc
 // @Summary 创建文章
 // @Produce json
-// @Param tag_id body string true "标签ID"
+// @Param tag_ids body []int true "标签ID列表"
 // @Param title body string true "文章标题"
 // @Param desc body string false "文章简述"
 // @Param cover_image_url body string true "封面图片地址"
@@ -119,7 +119,7 @@ func (a *Article) Create(c *gin.Context) {
 // Update godoc
 // @Summary 更新文章
 // @Produce json
-// @Param tag_id body string false "标签ID"
+// @Param tag_ids body []int false "标签ID列表"
 // @Param title body string false "文章标题"
 // @Param desc body string false "文章简述"
 // @Param cover_image_url body string false "封面图片地址"

@@ -82,12 +82,15 @@ const docTemplate = `{
                 "summary": "创建文章",
                 "parameters": [
                     {
-                        "description": "标签ID",
-                        "name": "tag_id",
+                        "description": "标签ID列表",
+                        "name": "tag_ids",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
                         }
                     },
                     {
@@ -208,11 +211,14 @@ const docTemplate = `{
                 "summary": "更新文章",
                 "parameters": [
                     {
-                        "description": "标签ID",
-                        "name": "tag_id",
+                        "description": "标签ID列表",
+                        "name": "tag_ids",
                         "in": "body",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
                         }
                     },
                     {

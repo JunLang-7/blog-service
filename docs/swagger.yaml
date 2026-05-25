@@ -124,12 +124,14 @@ paths:
       summary: 获取多个文章
     post:
       parameters:
-      - description: 标签ID
+      - description: 标签ID列表
         in: body
-        name: tag_id
+        name: tag_ids
         required: true
         schema:
-          type: string
+          items:
+            type: integer
+          type: array
       - description: 文章标题
         in: body
         name: title
@@ -229,11 +231,13 @@ paths:
       summary: 获取单个文章
     put:
       parameters:
-      - description: 标签ID
+      - description: 标签ID列表
         in: body
-        name: tag_id
+        name: tag_ids
         schema:
-          type: string
+          items:
+            type: integer
+          type: array
       - description: 文章标题
         in: body
         name: title

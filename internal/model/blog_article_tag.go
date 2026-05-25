@@ -25,6 +25,15 @@ func (a *BlogTagArticle) GetByAID(db *gorm.DB) (*BlogTagArticle, error) {
 	return &articleTag, nil
 }
 
+func (a *BlogTagArticle) ListByAID(db *gorm.DB) ([]*BlogTagArticle, error) {
+	var articleTags []*BlogTagArticle
+	err := db.Where("article_id = ? and is_del = ?", a.ArticleID, 0).Find(&articleTags).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return articleTags, nil
+}
+
 func (a *BlogTagArticle) ListByTID(db *gorm.DB) ([]*BlogTagArticle, error) {
 	var articleTags []*BlogTagArticle
 	if err := db.Where("tag_id = ? and is_del = ?", a.TagID, 0).Find(&articleTags).Error; err != nil {
@@ -56,4 +65,8 @@ func (a *BlogTagArticle) Delete(db *gorm.DB) error {
 
 func (a *BlogTagArticle) DeleteOne(db *gorm.DB) error {
 	return db.Where("id = ? and is_del = ?", a.ID, 0).Delete(a).Limit(1).Error
+}
+
+func (a *BlogTagArticle) DeleteByArticleID(db *gorm.DB) error {
+	return db.Where("article_id = ? and is_del = ?", a.ArticleID, 0).Delete(a).Error
 }

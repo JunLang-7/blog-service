@@ -129,3 +129,40 @@ func (a *BlogArticle) CountByTagID(db *gorm.DB, tagID uint32, filterTag bool, fi
 	}
 	return int(count), nil
 }
+
+func (a *BlogArticle) ListByIDs(db *gorm.DB, ids []uint32, pageOffset, pageSize int, filterState bool) ([]*BlogArticle, error) {
+	var articles []*BlogArticle
+	if pageOffset >= 0 && pageSize > 0 {
+		db = db.Offset(pageOffset).Limit(pageSize)
+	}
+	if ids != nil {
+		if len(ids) == 0 {
+			return nil, nil
+		}
+		db = db.Where("id IN (?)", ids)
+	}
+	if filterState {
+		db = db.Where("state = ?", a.State)
+	}
+	if err := db.Where("is_del = ?", 0).Find(&articles).Error; err != nil {
+		return nil, err
+	}
+	return articles, nil
+}
+
+func (a *BlogArticle) CountByIDs(db *gorm.DB, ids []uint32, filterState bool) (int, error) {
+	var count int64
+	if ids != nil {
+		if len(ids) == 0 {
+			return 0, nil
+		}
+		db = db.Where("id IN (?)", ids)
+	}
+	if filterState {
+		db = db.Where("state = ?", a.State)
+	}
+	if err := db.Model(a).Where("is_del = ?", 0).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
+}
